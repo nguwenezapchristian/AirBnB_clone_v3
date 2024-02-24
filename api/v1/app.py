@@ -14,6 +14,11 @@ HBNB_API_PORT = getenv('HBNB_API_PORT')
 
 @app.teardown_appcontext
 def close_app(exception):
+    """this closes the app
+
+    Args:
+        exception (_type_): _description_
+    """
     storage.close()
 
 
