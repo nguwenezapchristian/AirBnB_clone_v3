@@ -1,11 +1,17 @@
 #!/usr/bin/python3
 """This is the Flask module for our API."""
+
+
 from flask import Flask
 from models import storage
 from api.v1.views import app_views
 from os import getenv
 
+
+"""start flask"""
 app = Flask(__name__)
+
+"""regiser blueprint"""
 app.register_blueprint(app_views)
 
 HBNB_API_HOST = getenv('HBNB_API_HOST')
