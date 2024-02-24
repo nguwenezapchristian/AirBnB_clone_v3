@@ -11,6 +11,7 @@ def status():
         "status": "OK"
         })
 
+
 @app_views.route("/stats", methods=["GET"], strict_slashes=False)
 def Somestats():
     """Retrieves the number of objects per each type"""
@@ -22,6 +23,7 @@ def Somestats():
     from models.state import State
     from models import storage
     import json
+
     obj = {
         "amenities": storage.count(Amenity),
         "cities": storage.count(City),
