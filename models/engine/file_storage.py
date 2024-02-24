@@ -22,7 +22,7 @@ class FileStorage:
     # string - path to the JSON file
     __file_path = "file.json"
     # dictionary - empty but will store all objects by <class name>.id
-    __objects = {} 
+    __objects = {}
 
     def all(self, cls=None):
         """returns the dictionary __objects"""
@@ -55,8 +55,14 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
+        except FileNotFoundError:
             pass
+        except json.JSONDecodeError:
+            pass
+        except KeyError:
+            pass
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
@@ -73,16 +79,17 @@ class FileStorage:
         """ A method to retrieve one object """
         key = cls.__name__ + "." + id
         return self.__objects.get(key)
-    
+
     def count(self, cls=None):
         """ A method to count the number of objects in storage """
         if cls is None:
-            return len(self.__objects)        
+            return len(self.__objects)
         else:
-            """  If no class is passed, returns the count of all objects in storage """
+            """  If no class is passed, returns
+            the count of all objects in storage
+            """
             count = 0
             for key, value in self.__objects.items():
                 if isinstance(value, cls):
                     count += 1
             return count
-        
