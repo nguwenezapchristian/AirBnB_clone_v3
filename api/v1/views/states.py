@@ -4,6 +4,7 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 from flask import jsonify, request, abort
+import json
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
@@ -11,7 +12,7 @@ def all_states():
     """This returns all states"""
     states = storage.all(State).values()
     states_list = [state.to_dict() for state in states]
-    return jsonify(states_list)
+    return json.dumps(states_list, indent=2)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -20,10 +21,14 @@ def state_id(state_id):
     state = storage.get(State, state_id)
     if not state:
         abort(404)
-    return jsonify(state.to_dict())
+    return json.dumps(state.to_dict(), indent=2)
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route(
+        '/states/<state_id>',
+        methods=['DELETE'],
+        strict_slashes=False
+        )
 def delete_state(state_id):
     """This deletes a state"""
     state = storage.get(State, state_id)
@@ -31,7 +36,7 @@ def delete_state(state_id):
         abort(404)
     storage.delete(state)
     storage.save()
-    return jsonify({}), 200
+    return json.dumps({}, indent=2), 200
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -44,7 +49,7 @@ def create_state():
         abort(400)
     new_state = State(**state_to_create)
     new_state.save()
-    return jsonify(new_state.to_dict()), 201
+    return json.dumps(new_state.to_dict(), indent=2), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
@@ -60,4 +65,4 @@ def update_state(state_id):
         if key not in ["id", "created_at", "updated_at"]:
             setattr(state, key, value)
     storage.save()
-    return jsonify(state.to_dict()), 200
+    return json.dumps(state.to_dict(), indent=2), 200
