@@ -44,9 +44,9 @@ def create_state():
     """This function creates a state"""
     state_to_create = request.get_json()
     if not state_to_create:
-        abort(400)
+        abort(400, "Not a JSON")
     if "name" not in state_to_create:
-        abort(400)
+        abort(400, "Missing name")
     new_state = State(**state_to_create)
     new_state.save()
     return json.dumps(new_state.to_dict(), indent=2), 201
