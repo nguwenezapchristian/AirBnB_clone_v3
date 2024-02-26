@@ -3,9 +3,9 @@
 Create a new view for User object that handles
 all default RESTFul API actions
 """
-from models.user import User
 from api.v1.app import app_views
 from flask import request, abort
+from models.user import User
 from models import storage
 import json
 
