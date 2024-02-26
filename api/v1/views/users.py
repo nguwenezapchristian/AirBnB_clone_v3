@@ -13,7 +13,7 @@ import json
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def all_users():
     """ this retrieves the list of all users """
-    users = storage.all(User).items()
+    users = storage.all(User).values()
     list_users = [user.to_dict() for user in users]
     return json.dumps(list_users, indent=2)
 
@@ -34,6 +34,7 @@ def delete_user(user_id):
     if not user:
         abort(404)
     storage.delete(user)
+    storage.save()
     return json.dumps({}), 200
 
 
@@ -62,7 +63,7 @@ def update_user(user_id):
     if not user_data:
         abort(400, "Not a JSON")
     for key, value in user_data.items():
-        if key not in ["id", "created_at", "updated_at"]:
+        if key not in ["id", "email", "created_at", "updated_at"]:
             setattr(user, key, value)
     storage.save()
     return json.dumps(user.to_dict(), indent=2), 200
