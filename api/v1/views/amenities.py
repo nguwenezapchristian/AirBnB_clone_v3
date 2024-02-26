@@ -30,7 +30,7 @@ def amenity_id(amenity_id):
         methods=['DELETE'],
         strict_slashes=False
         )
-def delete_state(state_id):
+def delete_amenity(amenity_id):
     """This deletes a amenity"""
     amenity = storage.get(Amenity, amenity_id)
     if not amenity:
@@ -41,7 +41,7 @@ def delete_state(state_id):
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
-def create_state():
+def create_amenity():
     """This function creates an amenity"""
     amenity_to_create = request.get_json()
     if not amenity_to_create:
@@ -55,7 +55,7 @@ def create_state():
 
 @app_views.route('/amenities/<amenity_id>',
                  methods=['PUT'], strict_slashes=False)
-def update_state(state_id):
+def update_amenity(amenity_id):
     """Update the Amenity"""
     amenity = storage.get(Amenity, amenity_id)
     if not amenity:
