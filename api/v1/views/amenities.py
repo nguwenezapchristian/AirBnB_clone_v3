@@ -12,17 +12,17 @@ def all_amenities():
     """This returns all amenities"""
     amenities = storage.all(Amenity).values()
     amenities_list = [amenity.to_dict() for amenity in amenities]
-    return json.dumps(amenities, indent=2)
+    return json.dumps(amenities_list, indent=2)
 
 
 @app_views.route('amenities/<amenity_id>',
                  methods=['GET'], strict_slashes=False)
 def amenity_id(amenity_id):
     """Returns the amenity with that id"""
-    state = storage.get(Amenity, amenity_id)
-    if not state:
+    amenity = storage.get(Amenity, amenity_id)
+    if not amenity:
         abort(404)
-    return json.dumps(state.to_dict(), indent=2)
+    return json.dumps(amenity.to_dict(), indent=2)
 
 
 @app_views.route(
@@ -48,7 +48,7 @@ def create_amenity():
         abort(400, "Not a JSON")
     if "name" not in amenity_to_create:
         abort(400, "Missing name")
-    new_amenity = State(**amenity_to_create)
+    new_amenity = Amenity(**amenity_to_create)
     new_amenity.save()
     return json.dumps(new_amenity.to_dict(), indent=2), 201
 
